@@ -1,0 +1,25 @@
+#1
+
+from cryptography.fernet import Fernet
+
+
+def generate_key():
+    return Fernet.generate_key()
+
+# Encrypt a URL
+def encrypt_url(url, key):
+    cipher_suite = Fernet(key)
+    encrypted_url = cipher_suite.encrypt(url.encode())
+    return encrypted_url
+
+# Example usage
+if __name__ == "__main__":
+    # Generate a key (you should store this securely)
+    key = generate_key()
+
+    # URL to encrypt
+    original_url = input("Message : ")
+    print("KEY : ",str(key)[2:-1])
+    # Encrypt the URL
+    encrypted_url = encrypt_url(original_url, key)
+    print("Encrypted URL:", str(encrypted_url)[2:-1])
