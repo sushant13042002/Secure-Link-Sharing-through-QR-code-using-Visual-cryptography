@@ -1,0 +1,24 @@
+#5
+
+from pyzbar.pyzbar import decode
+from PIL import Image
+
+def decode_qr_with_pyzbar(image_path):
+    image = Image.open(image_path)
+    decoded_objects = decode(image)
+
+    for obj in decoded_objects:
+        if obj.type == 'QRCODE':
+            return obj.data.decode('utf-8')
+
+    return None
+
+image_path = "decoded_qr.png"
+decoded_data = decode_qr_with_pyzbar(image_path)
+
+if decoded_data:
+    print("Decoded Text:", decoded_data)
+else:
+    print("No QR code detected using pyzbar.")
+
+
