@@ -1,0 +1,20 @@
+from cryptography.fernet import Fernet
+
+# Decrypt an encrypted URL
+def decrypt_url(encrypted_url, key):
+    cipher_suite = Fernet(key)
+    decrypted_url = cipher_suite.decrypt(encrypted_url).decode()
+    return decrypted_url
+
+# Example usage for decryption
+if __name__ == "__main__":
+    # The key should be generated and stored securely (not within this script)
+    key = input("Key: ").encode()
+  # Replace with your actual key
+
+    # Encrypted URL
+    encrypted_url = input("URL :").encode() # Replace with your actual encrypted URL
+
+    # Decrypt the URL
+    decrypted_url = decrypt_url(encrypted_url, key)
+    print("Decrypted URL:", decrypted_url)
