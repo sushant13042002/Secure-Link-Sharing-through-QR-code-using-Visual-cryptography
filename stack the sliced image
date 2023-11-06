@@ -1,0 +1,36 @@
+#Aarju
+
+from PIL import Image, ImageEnhance, ImageChops
+
+# Open the background and overlay images
+background = Image.open("qr-code_B.png")
+overlay = Image.open("qr-code_A.png")
+
+# Convert both images to RGBA mode
+background = background.convert("RGBA")
+overlay = overlay.convert("RGBA")
+
+# Blend the two images
+new_img = Image.blend(background, overlay, 0.5)
+
+# Create a mask to identify the common area
+common_mask = ImageChops.difference(background, overlay)
+threshold = 30  # Adjust the threshold as needed to isolate the common area
+common_mask = common_mask.convert("L")  # Convert to grayscale
+common_mask = common_mask.point(lambda p: p > threshold and 255)  # Apply the threshold
+
+# Invert the common mask to make the common area black and the rest white
+common_mask = ImageChops.invert(common_mask)
+
+# Convert the common area in the blended image to white and the rest to black
+white_common_area = Image.new("RGBA", new_img.size, (255, 255, 255, 255))
+black_rest_area = Image.new("RGBA", new_img.size, (0, 0, 0, 255))
+new_img = Image.composite(white_common_area, black_rest_area, common_mask)
+
+# Enhance the clarity of the resulting image (you can adjust the enhancement factor)
+enhancer = ImageEnhance.Sharpness(new_img)
+enhanced_img = enhancer.enhance(2.0)  # Increase the sharpness factor
+
+# Save the enhanced image
+enhanced_img.save("decoded_qr.png", "PNG")
+print("Overlayed Image Generated")
